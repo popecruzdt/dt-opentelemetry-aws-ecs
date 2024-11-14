@@ -41,6 +41,10 @@ processors:
     - key: dynatrace.otel.collector
       value: aws-ecs-fargate
       action: insert
+    - key: aws.ecs.service.name
+      value: ""
+      action: delete
+
   # ecs relevant attributes
   attributes/ecs:
     actions:
@@ -80,4 +84,8 @@ service:
     metrics:
       receivers: [otlp, awsecscontainermetrics, prometheus/selfmon]
       processors: [memory_limiter, resource/dt, attributes/ecs, cumulativetodelta, batch]
+      exporters: [debug, otlphttp/dynatrace]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, resource/dt, attributes/ecs, batch]
       exporters: [debug, otlphttp/dynatrace]
