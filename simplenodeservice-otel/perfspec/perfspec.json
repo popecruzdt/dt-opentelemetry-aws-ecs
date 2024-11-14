@@ -1,0 +1,45 @@
+{
+    "spec_version": "1.0",
+    "indicators": [
+        {
+            "id": "ResponseTime_Service",
+            "source": "Dynatrace",
+            "query": {
+                "timeseriesId": "com.dynatrace.builtin:service.responsetime",
+                "aggregation": "AVG",
+                "startTimestamp": "",
+                "endTimestamp": ""
+            },
+            "grading": {
+                "type": "Threshold",
+                "thresholds": {
+                    "upperSevere": 1000000,
+                    "upperWarning": 800000
+                },
+                "metricScore": 50
+            }
+        },
+        {
+            "id": "FailureRate_Service",
+            "source": "Dynatrace",
+            "query": {
+                "timeseriesId": "com.dynatrace.builtin:service.failurerate",
+                "aggregation": "AVG",
+                "startTimestamp": "",
+                "endTimestamp": ""
+            },
+            "grading": {
+                "type": "Threshold",
+                "thresholds": {
+                    "upperSevere": 10,
+                    "upperWarning": 1
+                },
+                "metricScore": 50
+            }
+        }
+    ],
+    "objectives": {
+        "pass": 90,
+        "warning": 75
+    }
+}
