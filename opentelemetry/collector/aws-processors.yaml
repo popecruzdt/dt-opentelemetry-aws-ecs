@@ -1,0 +1,69 @@
+  # filter signals
+  filter/resources:
+    metrics:
+      include:
+        match_type: regexp
+        metric_names:
+          - .*memory.reserved
+          - .*memory.utilized
+          - .*cpu.reserved
+          - .*cpu.utilized
+          - .*network.rate.rx
+          - .*network.rate.tx
+          - .*storage.read_bytes
+          - .*storage.write_bytes
+  # transform metrics
+  metricstransform/aws:
+    transforms:
+      - include: ecs.task.memory.utilized
+        action: update
+        new_name: MemoryUtilized
+      - include: ecs.task.memory.reserved
+        action: update
+        new_name: MemoryReserved
+      - include: ecs.task.cpu.utilized
+        action: update
+        new_name: CpuUtilized
+      - include: ecs.task.cpu.reserved
+        action: update
+        new_name: CpuReserved
+      - include: ecs.task.network.rate.rx
+        action: update
+        new_name: NetworkRxBytes
+      - include: ecs.task.network.rate.tx
+        action: update
+        new_name: NetworkTxBytes
+      - include: ecs.task.storage.read_bytes
+        action: update
+        new_name: StorageReadBytes
+      - include: ecs.task.storage.write_bytes
+        action: update
+        new_name: StorageWriteBytes
+  # modify resource attributes
+  resource/aws:
+    attributes:
+      - key: ClusterName
+        from_attribute: aws.ecs.cluster.name
+        action: insert
+      - key: aws.ecs.cluster.name
+        action: delete
+      - key: ServiceName
+        from_attribute: aws.ecs.service.name
+        action: insert
+      - key: aws.ecs.service.name
+        action: delete
+      - key: TaskId
+        from_attribute: aws.ecs.task.id
+        action: insert
+      - key: aws.ecs.task.id
+        action: delete
+      - key: TaskDefinitionFamily
+        from_attribute: aws.ecs.task.family
+        action: insert
+      - key: aws.ecs.task.family
+        action: delete
+      - key: ContainerName
+        from_attribute: container.name
+        action: insert
+      - key: container.name
+        action: delete 
