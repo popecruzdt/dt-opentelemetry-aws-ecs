@@ -12,9 +12,28 @@ receivers:
 processors:
   # batch processor
   batch:
+    send_batch_max_size: 1000
+    timeout: 30s
+    send_batch_size: 800
+  # memory limiter
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 70
+    spike_limit_percentage: 30
+  # cumulative sum to delta metrics
+  cumulativetodelta: {}
+  # dynatrace relevant attributes
+  resource/dt:
+    attributes:
+    - key: telemetry.sdk.name
+      value: opentelemetry
+      action: insert
+    - key: dynatrace.otel.collector
+      value: aws-ecs-fargate
+      action: insert
 
   # filter signals
-  filter:
+  filter/resources:
     metrics:
       include:
         match_type: regexp
@@ -28,7 +47,7 @@ processors:
           - .*storage.read_bytes
           - .*storage.write_bytes
   # transform metrics
-  metricstransform:
+  metricstransform/aws:
     transforms:
       - include: ecs.task.memory.utilized
         action: update
@@ -55,7 +74,7 @@ processors:
         action: update
         new_name: StorageWriteBytes
   # modify resource attributes
-  resource:
+  resource/aws:
     attributes:
       - key: ClusterName
         from_attribute: aws.ecs.cluster.name
@@ -100,9 +119,9 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [batch]
+      processors: [memory_limiter, resource/dt, resource/aws, batch]
       exporters: [debug, otlphttp/dynatrace]
     metrics:
       receivers: [otlp, awsecscontainermetrics]
-      processors: [batch]
+      processors: [memory_limiter, resource/dt, resource/aws, cumulativetodelta, batch]
       exporters: [debug, otlphttp/dynatrace]
