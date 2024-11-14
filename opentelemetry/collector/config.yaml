@@ -84,38 +84,25 @@ processors:
         action: delete 
 
 exporters:
-  # amazon cloudwatch
-  awsemf:
-    namespace: ECS/ContainerInsights
-    log_group_name:  '/aws/ecs/containerinsights/{ClusterName}/performance'
-    log_stream_name: '{TaskId}'
-    resource_to_telemetry_conversion:
-      enabled: true
-    dimension_rollup_option: NoDimensionRollup
-    metric_declarations:
-      - dimensions: [[ClusterName], [ClusterName, TaskDefinitionFamily]]
-        metric_name_selectors: 
-          - MemoryUtilized 
-          - MemoryReserved 
-          - CpuUtilized
-          - CpuReserved
-          - NetworkRxBytes
-          - NetworkTxBytes
-          - StorageReadBytes
-          - StorageWriteBytes
-      - dimensions: [[ClusterName], [ClusterName, TaskDefinitionFamily, ContainerName]]
-        metric_name_selectors: [container.*]
+  # otlphttp to dynatrace using environment variable
+  otlphttp/dynatrace:
+    endpoint: "${env:DT_ENDPOINT}"
+    headers:
+      Authorization: "Api-Token ${env:DT_API_TOKEN}"
+  
   # debug
   debug:
-    verbosity: detailed
+    verbosity: basic
+    sampling_initial: 5
+    sampling_thereafter: 20
 
 service:
   pipelines:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug]
+      exporters: [debug, otlphttp/dynatrace]
     metrics:
       receivers: [otlp, awsecscontainermetrics]
       processors: [batch]
-      exporters: [debug]
+      exporters: [debug, otlphttp/dynatrace]
