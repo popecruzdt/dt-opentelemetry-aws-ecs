@@ -9,6 +9,11 @@ receivers:
       grpc:
       http:
   
+  # statsd metric listener
+  statsd:
+    endpoint: 0.0.0.0:8125
+    aggregation_interval: 60s
+
   # prometheus self-monitoring
   prometheus/selfmon:
     config:
@@ -42,8 +47,8 @@ processors:
       value: aws-ecs-fargate
       action: insert
     - key: aws.ecs.service.name
-      value: ""
-      action: delete
+      value: unknown
+      action: insert
 
   # ecs relevant attributes
   attributes/ecs:
@@ -82,7 +87,7 @@ service:
       processors: [memory_limiter, resource/dt, attributes/ecs, batch]
       exporters: [debug, otlphttp/dynatrace]
     metrics:
-      receivers: [otlp, awsecscontainermetrics, prometheus/selfmon]
+      receivers: [otlp, awsecscontainermetrics, statsd, prometheus/selfmon]
       processors: [memory_limiter, resource/dt, attributes/ecs, cumulativetodelta, batch]
       exporters: [debug, otlphttp/dynatrace]
     logs:
