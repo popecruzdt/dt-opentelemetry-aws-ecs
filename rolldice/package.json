@@ -2,7 +2,7 @@
   "name": "rolldice",
   "version": "1.0.0",
   "scripts": {
-    "start": "node --require ./instrumentation.js app.js"
+    "start": "node --require @opentelemetry/auto-instrumentations-node/register app.js"
   },
   "keywords": [],
   "author": "",
