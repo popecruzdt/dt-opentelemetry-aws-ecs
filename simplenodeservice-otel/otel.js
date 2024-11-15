@@ -7,6 +7,7 @@ const { BatchSpanProcessor } = require("@opentelemetry/sdk-trace-base");
 const { OTLPTraceExporter } = require("@opentelemetry/exporter-trace-otlp-proto");
 const { OTLPMetricExporter } = require("@opentelemetry/exporter-metrics-otlp-proto");
 const { MeterProvider, PeriodicExportingMetricReader, AggregationTemporality } = require('@opentelemetry/sdk-metrics');
+const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
 
 const DT_API_URL = process.env.DT_OTLP_ENDPOINT || EMPTY; // Set DT_API_URL from environment variable
 const DT_API_TOKEN = process.env.DT_API_TOKEN || EMPTY; // Set DT_API_TOKEN from envronment variable
