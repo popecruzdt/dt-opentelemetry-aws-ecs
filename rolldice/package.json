@@ -1,0 +1,18 @@
+{
+  "name": "rolldice",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node ./app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.52.1",
+    "@opentelemetry/sdk-metrics": "^1.27.0",
+    "@opentelemetry/sdk-node": "^0.54.2",
+    "express": "^4.21.1"
+  }
+}
