@@ -27,12 +27,15 @@ if(OTEL_EXPORTER_OTLP_ENDPOINT === null) {
     exporter = new OTLPTraceExporter({
         url: OTEL_EXPORTER_OTLP_ENDPOINT + '/v1/traces',
     });
+    console.log("Environment variable 'OTEL_EXPORTER_OTLP_ENDPOINT' is '" + OTEL_EXPORTER_OTLP_ENDPOINT + "', switching to OTLPTraceExporter");
 }
 
 const sdk = new NodeSDK({
   traceExporter: exporter,
   instrumentations: [getNodeAutoInstrumentations()]
 });
+
+console.log("OpenTelemetry SDK constructed");
 
 sdk
   .start()
