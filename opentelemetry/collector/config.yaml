@@ -46,19 +46,16 @@ processors:
     - key: dynatrace.otel.collector
       value: aws-ecs-fargate
       action: insert
-    - key: aws.ecs.service.name
-      value: unknown
-      action: insert
 
   # ecs relevant attributes
-  attributes/ecs:
-    actions:
+  resource/ecs:
+    attributes:
     - key: service.name
-      from_attribute: aws.ecs.task.family 
-      action: insert
+      value: "${env:OTEL_SERVICE_NAME}"
+      action: upsert
     - key: service.namespace
-      from_attribute: aws.ecs.cluster.name
-      action: insert
+      value: "${env:OTEL_SERVICE_NAMESPACE}"
+      action: upsert
 
 exporters:
   # otlphttp to dynatrace using environment variable
@@ -84,13 +81,13 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [memory_limiter, resource/dt, attributes/ecs, batch]
+      processors: [memory_limiter, resource/dt, resource/ecs, batch]
       exporters: [debug, otlphttp/dynatrace]
     metrics:
       receivers: [otlp, awsecscontainermetrics, statsd, prometheus/selfmon]
-      processors: [memory_limiter, resource/dt, attributes/ecs, cumulativetodelta, batch]
+      processors: [memory_limiter, resource/dt, resource/ecs, cumulativetodelta, batch]
       exporters: [debug, otlphttp/dynatrace]
     logs:
       receivers: [otlp]
-      processors: [memory_limiter, resource/dt, attributes/ecs, batch]
+      processors: [memory_limiter, resource/dt, resource/ecs, batch]
       exporters: [debug, otlphttp/dynatrace]
