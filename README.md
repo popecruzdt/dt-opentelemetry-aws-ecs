@@ -40,6 +40,9 @@ Duration: 2
 #### Prerequisites
 - Admin access to AWS Account with permissions to deploy resources in AWS ECS, IAM, and SSM Parameter Store
 - Dynatrace SaaS tenant
+- Dynatrace Access (API) Token with the following scopes
+  - Ingest metrics
+  - Ingest OpenTelemetry traces
 
 <!-- -------------------------->
 ## Setup
@@ -212,7 +215,7 @@ Give the parameter a name, i.e. `/dynatrace/opentelemetry-aws-ecs/dt_api_token`.
 
 Choose type `String`.  Optionally you can use type `SecureString` if you have AWS KMS set up.
 
-In the `Value` field, provide the Dynatrace API Access Token value with `openTelemetryTrace.ingest`, `metrics.ingest`, and `logs.ingest` token scopes.
+In the `Value` field, provide the Dynatrace API Access Token value with `openTelemetryTrace.ingest`, `metrics.ingest` token scopes.
 
 ```text
 dt0c01.*
