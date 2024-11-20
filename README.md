@@ -1,4 +1,49 @@
+id: opentelemetry-aws-ecs
+summary: dynatrace opentelemetry ingest for aws ecs (fargate) using opentelemetry collector as sidecar container
+author: Tony Pope-Cruz
+
 # OpenTelemetry for AWS ECS
+<!-- ------------------------ -->
+## Overview 
+Total Duration: 30 minutes
+
+### What You’ll Learn Today
+In this lab we'll utilize the OpenTelemetry Collector deployed as a sidecar container to collect traces and metrics from a Node.js app on AWS ECS (Fargate) and ship them to Dynatrace.
+
+Lab tasks:
+1. Create an AWS Elastic Container Service (ECS) Cluster
+2. Create an AWS IAM Policy
+3. Create an AWS IAM Role (x2)
+4. Create an AWS SSM Parameter (x3)
+5. Create an AWS ECS Task Definition
+6. Create an AWS ECS Service on the Cluster
+7. Observe the results in Dynatrace
+
+![dt_dashboard_aws_ecs_opentelemetry_metrics](img/dt_dashboard_aws_ecs_opentelemetry_metrics.png)
+
+<!-- -------------------------->
+## Technical Specification 
+Duration: 2
+
+#### Technologies Used
+- [Dynatrace](https://www.dynatrace.com/trial)
+- [Amazon AWS Elastic Container Service](https://aws.amazon.com/ecs/)
+  - tested on Platform Version 1.4.0
+- [Node.js](https://nodejs.org/en/download/package-manager)
+  - tested on v20.17.0
+- [OpenTelemetry Collector - AWS Distro](https://aws-otel.github.io/docs/setup/ecs)
+  - tested on v0.41.1
+
+#### Reference Architecture
+![reference_architecture](img/reference_architecture.png)
+
+#### Prerequisites
+- Admin access to AWS Account with permissions to deploy resources in AWS ECS, IAM, and SSM Parameter Store
+- Dynatrace SaaS tenant
+
+<!-- -------------------------->
+## Setup
+Duration: 18
 
 ### Setting up AWS Distro for OpenTelemetry Collector in Amazon Elastic Container Service
 This guide generally follows setup instructions from AWS here:
@@ -344,3 +389,17 @@ Import the `AWS ECS OpenTelemetry` Dashboard into your Dynatrace environment.
 ![dt_dashboard_aws_ecs_opentelemetry_metrics](img/dt_dashboard_aws_ecs_opentelemetry_metrics.png)
 
 Open the Services and Distributed Traces Apps to analyze the `rolldice` transactions.
+
+<!-- -------------------------->
+## Wrap Up
+
+### What You Learned Today 
+By completing this lab, you've successfully deployed the OpenTelemetry Collector as a sidecar container on AWS ECS (Fargate) to collect traces and logs then ship them to Dynatrace for analysis.
+- The OpenTelemetry Collector was deployed as a sidecar container within the ECS Task Definition
+  - The collector configuration was stored in SSM Parameter Store and loaded through an environment variable
+  - The Dynatrace API details were stored in SSM Parameter Store and loaded through an environment variable
+- Dynatrace Dashboards (via DQL) allows you to perform powerful queries and analysis of the trace and metric data
+
+<!-- ------------------------ -->
+### Supplemental Material
+N/A
