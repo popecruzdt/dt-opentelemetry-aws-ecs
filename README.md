@@ -1,5 +1,7 @@
-id: opentelemetry-aws-ecs
+id: dt-opentelemetry-aws-ecs
+
 summary: dynatrace opentelemetry ingest for aws ecs (fargate) using opentelemetry collector as sidecar container
+
 author: Tony Pope-Cruz
 
 # OpenTelemetry for AWS ECS

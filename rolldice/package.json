@@ -1,8 +1,8 @@
 {
   "name": "rolldice",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
-    "start": "node --require @opentelemetry/auto-instrumentations-node/register app.js"
+    "start": "node -r ./instrumentation.js --require @opentelemetry/auto-instrumentations-node/register app.js"
   },
   "keywords": [],
   "author": "",
@@ -10,9 +10,12 @@
   "description": "",
   "dependencies": {
     "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/api-logs": "^0.200.0",
     "@opentelemetry/auto-instrumentations-node": "^0.52.1",
+    "@opentelemetry/exporter-logs-otlp-http": "^0.200.0",
+    "@opentelemetry/sdk-logs": "^0.200.0",
     "@opentelemetry/sdk-metrics": "^1.27.0",
     "@opentelemetry/sdk-node": "^0.54.2",
-    "express": "^4.21.1"
+    "express": "^4.21.2"
   }
 }
